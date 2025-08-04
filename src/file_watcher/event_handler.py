@@ -1,5 +1,6 @@
 import os
 import time
+import logging
 from datetime import datetime
 from watchdog.events import FileSystemEventHandler
 from tkinter import simpledialog, Tk
@@ -20,7 +21,7 @@ class VideoCreationHandler(FileSystemEventHandler):
         if not filename.lower().endswith(('.mkv', '.mp4', '.mov', '.flv')):
             return
 
-        print(f"\n[EVENT] arquivo de vídeo detectado: {filename}")
+        logging.info(f"\n[EVENT] arquivo de vídeo detectado: {filename}")
 
         # esperar o obs terminar de gravar antes de escrever o arquivo
         try:
@@ -28,9 +29,9 @@ class VideoCreationHandler(FileSystemEventHandler):
             while file_size != os.path.getsize(file_path):
                 file_size = os.path.getsize(file_path)
                 time.sleep(5) # espera 5 segundos para ver se o tamanho do arquivo muda
-            print("[INFO] arquivo estabilizado.")
+            logging.info("[INFO] arquivo estabilizado.")
         except FileNotFoundError:
-            print("[WARNING] gravação em andamento ou arquivo não encontrado, ignorando.")
+            logging.warning("[WARNING] gravação em andamento ou arquivo não encontrado, ignorando.")
             return
 
         try:
@@ -45,7 +46,7 @@ class VideoCreationHandler(FileSystemEventHandler):
             root.destroy()
             
             if not class_name:
-                print("[WARNING] nenhum nome de aula, abortando.")
+                logging.warning("[WARNING] nenhum nome de aula, abortando.")
                 return
             
             # faz upload
@@ -57,6 +58,6 @@ class VideoCreationHandler(FileSystemEventHandler):
                 sheets_service.update_calendar_entry(self.service_sheets, date_obj, video_link, class_name)
 
         except (ValueError, IndexError):
-            print(f"[ERROR] '{filename}' não está no formato esperado, ignorando.")
+            logging.error(f"[ERROR] '{filename}' não está no formato esperado, ignorando.")
         except Exception as e:
-            print(f"[ERROR] erro inesperado: {e}")
+            logging.error(f"[ERROR] erro inesperado: {e}")

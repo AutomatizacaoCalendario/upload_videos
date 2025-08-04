@@ -1,5 +1,6 @@
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.errors import HttpError
+import logging
 
 
 def upload_video(service_youtube, file_path, title, description):
@@ -8,7 +9,7 @@ def upload_video(service_youtube, file_path, title, description):
     Returns: URL do vídeo | None.
     """
     try:
-        print(f"Iniciando upload: '{title}'")
+        logging.debug(f"Iniciando upload: '{title}'")
         request_body = {
             'snippet': {
                 'title': title,
@@ -31,10 +32,10 @@ def upload_video(service_youtube, file_path, title, description):
         video_id = response_upload.get('id')
         video_url = f"https://www.youtube.com/watch?v={video_id}"
         
-        print(f"Upload success.")
+        logging.info(f"Upload success.")
         return video_url
         
     except HttpError as err:
-        print(f"Upload error: {err}")
+        logging.error(f"Upload error: {err}")
         return None
     

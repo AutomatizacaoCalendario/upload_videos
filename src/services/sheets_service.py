@@ -1,5 +1,6 @@
 from googleapiclient.errors import HttpError
 from src import config
+import logging
 
 def update_calendar_entry(service_sheets, date_obj, video_link, class_name):
     """
@@ -18,10 +19,10 @@ def update_calendar_entry(service_sheets, date_obj, video_link, class_name):
     day_number_str = str(date_obj.day)
     
     if not sheet_name:
-        print(f"Mapping error: '{month_name_en}'")
+        logging.error(f"Mapping error: '{month_name_en}'")
         return
 
-    print(f"Procurando dia {day_number_str} na aba '{sheet_name}'")
+    logging.info(f"Procurando dia {day_number_str} na aba '{sheet_name}'")
 
     try:
         # range suficiente pra cobrir todo o calendário do mês
@@ -47,7 +48,7 @@ def update_calendar_entry(service_sheets, date_obj, video_link, class_name):
                 break
         
         if target_row_idx == -1:
-            print(f"ERRO: Não foi possível encontrar o dia {day_number_str} na aba '{sheet_name}'.")
+            logging.error(f"ERRO: Não foi possível encontrar o dia {day_number_str} na aba '{sheet_name}'.")
             return
 
         # calcula a posição das células de link e nome da aula
@@ -90,7 +91,7 @@ def update_calendar_entry(service_sheets, date_obj, video_link, class_name):
             body=update_body
         ).execute()
 
-        print(f"Success. Google Sheets: dia {day_number_str} / {sheet_name}.")
+        logging.info(f"Success. Google Sheets: dia {day_number_str} / {sheet_name}.")
 
     except HttpError as err:
-        print(f"Error: Google Sheets: {err}")
+        logging.error(f"Error: Google Sheets: {err}")

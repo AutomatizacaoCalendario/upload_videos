@@ -1,4 +1,5 @@
 import os
+import logging
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -32,8 +33,8 @@ def authenticate_google_services():
     try:
         service_sheets = build('sheets', 'v4', credentials=creds)
         service_youtube = build('youtube', 'v3', credentials=creds)
-        print("Autenticação success.")
+        logging.info("[INFO] Autenticação success.")
         return service_sheets, service_youtube
     except HttpError as err:
-        print(f"Autenticação error: {err}")
+        logging.info(f"[INFO] Autenticação error: {err}")
         return None, None
