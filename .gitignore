@@ -14,3 +14,6 @@ env/
 client_secrets.json
 token.json
 iniciar_automacao.bat
+
+# Arquivos de log
+automacao_upload_videos.log

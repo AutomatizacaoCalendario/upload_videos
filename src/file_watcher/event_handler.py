@@ -28,7 +28,7 @@ class VideoCreationHandler(FileSystemEventHandler):
             file_size = -1
             while file_size != os.path.getsize(file_path):
                 file_size = os.path.getsize(file_path)
-                time.sleep(5) # espera 5 segundos para ver se o tamanho do arquivo muda
+                time.sleep(10) # espera 10 segundos para ver se o tamanho do arquivo muda
             logging.info("[INFO] arquivo estabilizado.")
         except FileNotFoundError:
             logging.warning("[WARNING] gravação em andamento ou arquivo não encontrado, ignorando.")
