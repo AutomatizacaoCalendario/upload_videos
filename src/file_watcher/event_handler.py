@@ -2,6 +2,7 @@ import os
 import time
 from datetime import datetime
 from watchdog.events import FileSystemEventHandler
+from tkinter import simpledialog, Tk
 
 from src.services import youtube_service, sheets_service
 
@@ -26,10 +27,10 @@ class VideoCreationHandler(FileSystemEventHandler):
             file_size = -1
             while file_size != os.path.getsize(file_path):
                 file_size = os.path.getsize(file_path)
-                time.sleep(10) # espera 10 segundos para ver se o tamanho do arquivo muda
+                time.sleep(5) # espera 5 segundos para ver se o tamanho do arquivo muda
             print("[INFO] arquivo estabilizado.")
         except FileNotFoundError:
-            print("[WARNING] arquivo não encontrado, ignorando.")
+            print("[WARNING] gravação em andamento ou arquivo não encontrado, ignorando.")
             return
 
         try:
@@ -38,7 +39,11 @@ class VideoCreationHandler(FileSystemEventHandler):
             date_obj = datetime.strptime(date_str, '%Y-%m-%d')
             
             # pergunta nome da aula
-            class_name = input(">>>>> Nome da aula: ").strip()
+            root = Tk()
+            root.withdraw()
+            class_name = simpledialog.askstring("Nome da Aula", "Insira nome:")
+            root.destroy()
+            
             if not class_name:
                 print("[WARNING] nenhum nome de aula, abortando.")
                 return

@@ -13,3 +13,4 @@ env/
 .env
 client_secrets.json
 token.json
+iniciar_automacao.bat
